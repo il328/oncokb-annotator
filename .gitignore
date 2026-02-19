@@ -2,6 +2,7 @@
 data/*.oncokb.*
 data/example_README.txt
 process
+compare_local/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
