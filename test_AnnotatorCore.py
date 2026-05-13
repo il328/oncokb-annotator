@@ -14,7 +14,6 @@ from AnnotatorCore import get_highest_tx_level
 from AnnotatorCore import get_cna
 from AnnotatorCore import get_oncokb_annotation_column_headers
 from AnnotatorCore import processalterationevents
-from AnnotatorCore import StructuralVariantQuery
 from AnnotatorCore import QueryType
 from AnnotatorCore import ALTERATION_HEADER
 from AnnotatorCore import HGVSP_HEADER
