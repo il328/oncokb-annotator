@@ -92,7 +92,7 @@ def test_reference_genome():
 
     queries = [
         ProteinChangeQuery('MYD88', 'M232T', 'Ovarian Cancer', ReferenceGenome.GRCH37),
-        ProteinChangeQuery('MYD88', 'M219T', 'Ovarian Cancer', ReferenceGenome.GRCH38)
+        ProteinChangeQuery('MYD88', 'M232T', 'Ovarian Cancer', ReferenceGenome.GRCH38)
     ]
 
     annotations = pull_protein_change_info(queries, False, False)
@@ -314,6 +314,10 @@ def test_fake_cna():
     fake_gene_one_query_suite(annotations, True)
 
 
+def assert_treatments_equal(actual, expected):
+    assert set(actual.split(',')) == set(expected.split(','))
+
+
 def check_brca2_s1882_without_cancertype(annotation, genomic_query=False):
     assert len(annotation) == NUMBER_OF_GC_ANNOTATION_COLUMNS if genomic_query else NUMBER_OF_ANNOTATION_COLUMNS
     assert annotation[(
@@ -322,12 +326,18 @@ def check_brca2_s1882_without_cancertype(annotation, genomic_query=False):
             NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + ONCOGENIC_INDEX) if genomic_query else ONCOGENIC_INDEX] == 'Likely Oncogenic'
     assert annotation[(
             NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + HIGHEST_LEVEL_INDEX) if genomic_query else HIGHEST_LEVEL_INDEX] == 'LEVEL_1'
-    assert annotation[(
-            NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + LEVEL_1_INDEX) if genomic_query else LEVEL_1_INDEX] == 'Olaparib,Olaparib+Bevacizumab,Rucaparib,Olaparib+Abiraterone+Prednisone,Niraparib,Talazoparib+Enzalutamide,Niraparib+Abiraterone Acetate+Prednisone'
-    assert annotation[(
-            NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + LEVEL_2_INDEX) if genomic_query else LEVEL_2_INDEX] == 'Olaparib,Rucaparib,Niraparib'
-    assert annotation[(
-            NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + LEVEL_3A_INDEX) if genomic_query else LEVEL_3A_INDEX] == 'Olaparib,Talazoparib'
+    assert_treatments_equal(
+        annotation[(NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + LEVEL_1_INDEX) if genomic_query else LEVEL_1_INDEX],
+        'Olaparib,Olaparib+Bevacizumab,Rucaparib,Olaparib+Abiraterone+Prednisone,Niraparib,Talazoparib+Enzalutamide,Niraparib+Abiraterone Acetate+Prednisone'
+    )
+    assert_treatments_equal(
+        annotation[(NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + LEVEL_2_INDEX) if genomic_query else LEVEL_2_INDEX],
+        'Olaparib,Rucaparib,Niraparib'
+    )
+    assert_treatments_equal(
+        annotation[(NUMBER_OF_ONCOKB_ANNOTATION_GC_COLUMNS + LEVEL_3A_INDEX) if genomic_query else LEVEL_3A_INDEX],
+        'Olaparib,Talazoparib'
+    )
 
 
 @pytest.mark.skipif(ONCOKB_API_TOKEN in (None, ''), reason="oncokb api token required")

@@ -16,6 +16,7 @@ from AnnotatorCore import levels
 from AnnotatorCore import dxLevels
 from AnnotatorCore import pxLevels
 from AnnotatorCore import SAMPLE_HEADERS
+from AnnotatorCore import DEFAULT_READ_FILE_MODE
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger('OncoKBPlots')
@@ -29,7 +30,7 @@ def plotclinicalactionability(ax, annotatedclinicalfile, outfile, parameters):
     if "levels" in parameters:
         extlevels = parameters["levels"]
 
-    with open(annotatedclinicalfile, 'rU') as clinfile:
+    with open(annotatedclinicalfile, DEFAULT_READ_FILE_MODE) as clinfile:
         reader = csv.reader(clinfile, delimiter='\t')
         headers = readheaders(reader)
         isample = geIndexOfHeader(headers, SAMPLE_HEADERS)
@@ -100,7 +101,7 @@ def plotimplications(ax, header, title, levels, annotatedclinicalfile, outfile, 
     if "levels" in parameters:
         extlevels = parameters["levels"]
 
-    with open(annotatedclinicalfile, 'rU') as clinfile:
+    with open(annotatedclinicalfile, DEFAULT_READ_FILE_MODE) as clinfile:
         reader = csv.reader(clinfile, delimiter='\t')
         headers = readheaders(reader)
         isample = headers['SAMPLE_ID']
