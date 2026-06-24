@@ -603,6 +603,11 @@ def resolve_query_type_for_row(row, headers, user_input_query_type, mutation_sta
         if alteration_value is not None and not is_hgvsc(alteration_value) and not is_hgvsg(alteration_value):
             return QueryType.HGVSP_SHORT
 
+    # fall back to genomic change when the row has no usable alteration but the file
+    # carries the genomic columns (chromosome, position, alleles)
+    if has_desired_headers(REQUIRED_QUERY_TYPE_COLUMNS[QueryType.GENOMIC_CHANGE], headers):
+        return QueryType.GENOMIC_CHANGE
+
     return None
 
 
