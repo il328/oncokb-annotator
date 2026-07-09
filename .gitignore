@@ -99,3 +99,13 @@ ENV/
 
 # MAC OS
 .DS_Store
+
+# large input data + generated outputs
+hersh_exome_annovar_annotated.hg38_multianno.stripped_id_only.txt
+exonic_only.txt
+exonic_maf.txt
+exonic_protein.maf
+*_annotated.txt
+test_*.txt
+chunks/
+

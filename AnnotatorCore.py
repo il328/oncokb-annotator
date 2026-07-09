@@ -521,7 +521,7 @@ def resolve_query_type(user_input_query_type, headers, mutation_status=None):
     # check the file has required columns
     if has_desired_headers(REQUIRED_QUERY_TYPE_COLUMNS[selected_query_type], headers) is False:
         # when it is False, it will never be GENOMIC_CHANGE. For other types, we need to check whether ALTERATION column is available
-        if ALTERATION_HEADER not in headers:
+        if ALTERATION_HEADER not in headers and "AAChange.refGeneWithVer" not in headers:
             raise Exception(
                 "The file does not have required columns "
                 + ', '.join(REQUIRED_QUERY_TYPE_COLUMNS[selected_query_type])
@@ -762,7 +762,8 @@ def process_alteration(maffilereader, outf, maf_headers, alteration_column_names
     iproteinpos = geIndexOfHeader(maf_headers, PROTEIN_POSITION_HEADERS)
     icancertype = geIndexOfHeader(maf_headers, CANCER_TYPE_HEADERS)
     ireferencegenome = geIndexOfHeader(maf_headers, REFERENCE_GENOME_HEADERS)
-
+    iaachange = geIndexOfHeader(maf_headers, ["AAChange.refGeneWithVer"])
+    igene_annovar = geIndexOfHeader(maf_headers, ["Gene.refGeneWithVer"])
     posp = re.compile('[0-9]+')
 
     i = 0
@@ -780,15 +781,28 @@ def process_alteration(maffilereader, outf, maf_headers, alteration_column_names
         if sampleidsfilter and sample not in sampleidsfilter:
             continue
 
-        hugo = row[ihugo]
-
         consequence = get_cell_content(row, iconsequence)
         if consequence in mutationtypeconsequencemap:
             consequence = '%2B'.join(mutationtypeconsequencemap[consequence])
 
-        hgvs = row[ihgvs]
-        if hgvs.startswith('p.'):
-            hgvs = hgvs[2:]
+        if iaachange >= 0:                                  # ANNOVAR AAChange path
+            aa = get_cell_content(row, iaachange, True)
+            if not aa or aa == '.':
+                continue                                    # no protein change -> skip row
+            first = aa.split(',')[0]                        # first transcript: gene:tx:exon:c.:p.
+            fields = first.split(':')
+            hugo = row[igene_annovar] if igene_annovar >= 0 else fields[0]
+            hgvs = ''
+            for fld in fields:
+                if fld.startswith('p.'):
+                    hgvs = fld[2:]                          # protein change, p. stripped
+            if hgvs == '':
+                continue
+        else:                                               # normal MAF path (unchanged)
+            hugo = row[ihugo]
+            hgvs = row[ihgvs]
+            if hgvs.startswith('p.'):
+                hgvs = hgvs[2:]
 
         cancertype = get_tumor_type_from_row(row, i, defaultCancerType, icancertype, cancerTypeMap, sample)
         reference_genome = get_reference_genome_from_row(get_cell_content(row, ireferencegenome),
