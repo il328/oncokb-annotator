@@ -764,6 +764,7 @@ def process_alteration(maffilereader, outf, maf_headers, alteration_column_names
     ireferencegenome = geIndexOfHeader(maf_headers, REFERENCE_GENOME_HEADERS)
     iaachange = geIndexOfHeader(maf_headers, ["AAChange.refGeneWithVer"])
     igene_annovar = geIndexOfHeader(maf_headers, ["Gene.refGeneWithVer"])
+    ifunc = geIndexOfHeader(maf_headers, ["Func.refGeneWithVer"])
     posp = re.compile('[0-9]+')
 
     i = 0
@@ -779,6 +780,8 @@ def process_alteration(maffilereader, outf, maf_headers, alteration_column_names
 
         sample = row[isample]
         if sampleidsfilter and sample not in sampleidsfilter:
+            continue
+        if ifunc >=0 and get_cell_content(row, ifunc, True) != 'exonic':
             continue
 
         consequence = get_cell_content(row, iconsequence)
