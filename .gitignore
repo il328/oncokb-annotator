@@ -102,11 +102,12 @@ ENV/
 
 # large input data + generated outputs
 hersh_exome_annovar_annotated.hg38_multianno.stripped_id_only.txt
+hersh_exome_biallelic_annovar_annotated.hg38_multianno.requested_predictor_scores.tsv
+exonic_toolscores_oncokb_apicall.txt
 exonic_only.txt
 exonic_maf.txt
 exonic_protein.maf
 *_annotated.txt
 test_*.txt
 chunks/
-hersh_exome_biallelic_annovar_annotated.hg38_multianno.requested_predictor_scores.tsv
-exonic_toolscores_oncokb_apicall.txt
+
