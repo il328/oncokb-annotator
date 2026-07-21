@@ -112,5 +112,7 @@ exonic_maf.txt
 exonic_protein.maf
 *_annotated.txt
 test_*.txt
+hersh_exome_biallelic_annovar_annotated.hg38_multianno.head.txt
+hersh_exome_biallelic_annovar_annotated.hg38_multianno.indels.first_10000.txt
 chunks/
 
