@@ -118,3 +118,4 @@ chunks/
 
 hersh_exome_biallelic_annovar_annotated.hg38_multianno.missense_ref_alt_chrom_position_gene_clinvar.tsv
 all_miss_oncogenic_55_full.csv
+sites_biallelic_exome.indels.vep112_loftee.plof_calls.tsv
