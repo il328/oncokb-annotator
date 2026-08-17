@@ -120,3 +120,6 @@ hersh_exome_biallelic_annovar_annotated.hg38_multianno.missense_ref_alt_chrom_po
 all_miss_oncogenic_55_full.csv
 sites_biallelic_exome.indels.vep112_loftee.plof_calls.tsv
 fisher_enrichment_results.tsv.gz
+fisher_predictions.tsv.gz
+lab_checkpoint.pkl
+res_checkpoint.pkl
